@@ -3,6 +3,7 @@ import { User, UserSchemaType } from "../models/User.js";
 import { mailSender } from "../utils/mailSender.js";
 import chalk from "chalk";
 import bcrypt from "bcrypt";
+import crypto from "crypto";
 
 type ResetPasswordTokenFunctionType = (
   req: Request,
@@ -27,12 +28,12 @@ export const resetPasswordToken: ResetPasswordTokenFunctionType = async (
     }
 
     // generate token
-    const token = crypto.randomUUID();
+    const token = crypto.randomBytes(20).toString("hex");
 
     // save token to db
-    const updateDetails = await User.findOneAndUpdate(
+    const updateDetails: UserSchemaType | null = await User.findOneAndUpdate(
       { email },
-      { token, resetPasswordExpires: Date.now() + 5 * 60 * 1000 },
+      { token, resetPasswordExpires: Date.now() + 3600000 },
       { new: true }
     );
 

@@ -1,6 +1,7 @@
-import mongoose, { Schema, model } from "mongoose";
+import mongoose, { Document, Model, Schema, model } from "mongoose";
 
-export interface SubSectionSchemaType {
+export interface SubSectionSchemaType extends Document {
+    _id: mongoose.Schema.Types.ObjectId,
     title: string,
     timeDuration: string,
     description: string,
@@ -22,4 +23,4 @@ const subSectionSchema = new Schema<SubSectionSchemaType>({
     },
 });
 
-export const SubSection = model<SubSectionSchemaType>("SubSection", subSectionSchema);
+export const SubSection: Model<SubSectionSchemaType> = model<SubSectionSchemaType>("SubSection", subSectionSchema);

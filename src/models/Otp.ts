@@ -1,9 +1,10 @@
-import mongoose, { Schema, model } from "mongoose";
+import mongoose, { Document, Model, Schema, model } from "mongoose";
 import chalk from "chalk";
 import { mailSender } from "../utils/mailSender.js";
 import SMTPTransport from "nodemailer/lib/smtp-transport/index.js";
 
-export interface OtpSchemaType {
+export interface OtpSchemaType extends Document {
+    _id: mongoose.Schema.Types.ObjectId,
     email: string,
     otp: string,
     createdAt: Date
@@ -45,4 +46,4 @@ otpSchema.pre("save", async function (this: OtpSchemaType, next) {
     next();
 })
 
-export const Otp = model<OtpSchemaType>("Otp", otpSchema);
+export const Otp: Model<OtpSchemaType> = model<OtpSchemaType>("Otp", otpSchema);

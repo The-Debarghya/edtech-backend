@@ -1,6 +1,7 @@
-import mongoose, { Schema, model } from "mongoose";
+import mongoose, { Document, Model, Schema, model } from "mongoose";
 
-export interface RatingAndReviewSchemaType {
+export interface RatingAndReviewSchemaType extends Document {
+    _id: mongoose.Schema.Types.ObjectId,
     user: mongoose.Schema.Types.ObjectId,
     rating: number,
     review: string
@@ -22,4 +23,4 @@ const ratingAndReviewSchema = new Schema<RatingAndReviewSchemaType>({
     }
 });
 
-export const RatingAndReview = model<RatingAndReviewSchemaType>("RatingAndReview", ratingAndReviewSchema);
+export const RatingAndReview: Model<RatingAndReviewSchemaType> = model<RatingAndReviewSchemaType>("RatingAndReview", ratingAndReviewSchema);

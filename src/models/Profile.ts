@@ -1,6 +1,7 @@
-import mongoose, { Schema, model } from "mongoose";
+import mongoose, { Document, Model, Schema, model } from "mongoose";
 
-export interface ProfileSchemaType {
+export interface ProfileSchemaType extends Document {
+    _id: mongoose.Schema.Types.ObjectId,
     gender: string,
     dateOfBirth: string,
     about: string,
@@ -24,4 +25,4 @@ const profileSchema = new Schema<ProfileSchemaType>({
     }
 });
 
-export const Profile = model<ProfileSchemaType>("Profile", profileSchema);
+export const Profile: Model<ProfileSchemaType> = model<ProfileSchemaType>("Profile", profileSchema);

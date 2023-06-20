@@ -1,6 +1,7 @@
-import mongoose, { Schema, model } from "mongoose";
+import mongoose, { Document, Model, Schema, model } from "mongoose";
 
-export interface TagSchemaType {
+export interface TagSchemaType extends Document {
+    _id: mongoose.Schema.Types.ObjectId,
     name: string,
     description: string,
     course: mongoose.Schema.Types.ObjectId,
@@ -20,4 +21,4 @@ const tagSchema = new Schema<TagSchemaType>({
     },
 });
 
-export const Tag = model<TagSchemaType>("Tag", tagSchema);
+export const Tag: Model<TagSchemaType> = model<TagSchemaType>("Tag", tagSchema);

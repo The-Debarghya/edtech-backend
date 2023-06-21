@@ -70,7 +70,7 @@ export const createCourse: CreateCourseFunctionType = async (req, res) => {
       });
     }
 
-    // check given tag
+    // check given category
     const categoryDetails = await Category.findById(category);
 
     if (!categoryDetails) {
@@ -123,7 +123,7 @@ export const createCourse: CreateCourseFunctionType = async (req, res) => {
       }
     ).exec();
 
-    // update the tag schema
+    // update the category schema
     // Add the new course to the Categories
     await Category.findByIdAndUpdate(
       { _id: category },

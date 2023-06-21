@@ -80,9 +80,9 @@ export const updateSubSection: CreateSubSectionFunctionType = async (
   res
 ) => {
   try {
-    const { sectionId, title, description } = req.body;
+    const { subSectionId, title, description } = req.body;
     const subSection: SubSectionSchemaType | null = await SubSection.findById(
-      sectionId
+      subSectionId
     ).exec();
 
     if (!subSection) {

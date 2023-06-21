@@ -9,16 +9,16 @@ import {
   getEnrolledCourses,
 } from "../controllers/Profile.js";
 
-const router: Router = Router();
+const profileRouter: Router = Router();
 // ***************************************************************************************
 //                                      Profile routes
 // ***************************************************************************************
 // Delet User Account
-router.delete("/deleteProfile", deleteAccount);
-router.put("/updateProfile", auth, updateProfile);
-router.get("/getUserDetails", auth, getAllUserDetails);
+profileRouter.delete("/deleteProfile", auth, deleteAccount);
+profileRouter.put("/updateProfile", auth, updateProfile);
+profileRouter.get("/getUserDetails", auth, getAllUserDetails);
 // Get Enrolled Courses
-router.get("/getEnrolledCourses", auth, getEnrolledCourses);
-router.put("/updateDisplayPicture", auth, updateDisplayPicture);
+profileRouter.get("/getEnrolledCourses", auth, getEnrolledCourses);
+profileRouter.put("/updateDisplayPicture", auth, updateDisplayPicture);
 
-export default router;
+export default profileRouter;

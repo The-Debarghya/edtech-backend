@@ -59,9 +59,11 @@ export const sendOtp: SendOtpFunctionType = async (req, res) => {
         */
 
     const otpPayload: { email: string; otp: string } = { email, otp };
+    // console.log(otpPayload);
 
     // create entry in db
     const otpBody: OtpSchemaType | null = await Otp.create(otpPayload);
+    // console.log("otp saved to db: ", otpBody);
 
     return res.status(200).json({
       success: true,
@@ -236,7 +238,7 @@ export const login: LoginFunctionType = async (req, res) => {
       const payload = {
         email: checkUserPresent.email,
         id: checkUserPresent._id,
-        role: checkUserPresent.accountType,
+        accountType: checkUserPresent.accountType,
       };
       const token = jwt.sign(payload, process.env.JWT_SECRET || "rohit", {
         expiresIn: "24h",
@@ -255,7 +257,7 @@ export const login: LoginFunctionType = async (req, res) => {
       return res.cookie("token", token, options).status(200).json({
         success: true,
         token,
-        checkUserPresent,
+        data: checkUserPresent,
         message: "Logged in successfully",
       });
     }

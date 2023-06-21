@@ -98,14 +98,14 @@ export const updateSection: CreateSectionFunctionType = async (req, res) => {
 export const deleteSection: CreateSectionFunctionType = async (req, res) => {
   try {
     // get Id - sending id in params
-    const { sectionId } = req.params;
+    const { sectionId } = req.body;
 
     // find and delete
-    await Section.findByIdAndDelete(sectionId);
+    await Section.findByIdAndDelete(sectionId).exec();
     // TODO: delete from course in which it is present
 
     return res.status(200).json({
-      success: false,
+      success: true,
       message: "Section deleted successfully",
     });
   } catch (err: any) {

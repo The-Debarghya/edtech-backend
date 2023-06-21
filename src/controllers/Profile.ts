@@ -75,14 +75,20 @@ export const deleteAccount: UpdateProfileFunctionType = async (req, res) => {
       });
     }
 
-    // delete profile
-    await Profile.findByIdAndDelete({ _id: userDetails.additionalDetails });
-
     // TODO: unenroll user from all enrolled courses
     // also find how can we schedule deletion [cronjobs]
 
+    // delete profile
+    const profileDeletionResponse = Profile.findByIdAndDelete({
+      _id: userDetails.additionalDetails,
+    });
+
     // delete user
-    await User.findByIdAndDelete(userId);
+    const userDeletionResponse = User.findByIdAndDelete(userId);
+
+    // promisify all --> execute all promises simultaneously --> this is because we need to
+    // delete both, if one doesn't gets deleted then it will cause discrepency
+    await Promise.all([profileDeletionResponse, userDeletionResponse]);
 
     // return response
     return res.status(200).json({
@@ -116,7 +122,7 @@ export const getAllUserDetails: UpdateProfileFunctionType = async (
     // return response
     return res.status(200).json({
       success: true,
-      message: "Fetched all users successfully",
+      message: "Fetched full user data successfully",
       data: userDetails,
     });
   } catch (err: any) {
@@ -134,9 +140,10 @@ export const updateDisplayPicture: UpdateProfileFunctionType = async (
   res
 ) => {
   try {
-    const displayPicture: FileType | FileType[] | undefined =
-      req.files?.displayPicture;
-    if (!displayPicture || displayPicture) {
+    const displayPicture: FileType | undefined = req.files?.displayPicture as
+      | FileType
+      | undefined;
+    if (!displayPicture || Object.keys(displayPicture).length === 0) {
       return res.status(404).json({
         success: false,
         message: "File not provided",
@@ -149,7 +156,7 @@ export const updateDisplayPicture: UpdateProfileFunctionType = async (
       1000,
       100
     );
-    console.log(image);
+    // console.log(image);
     const updatedProfile = await User.findByIdAndUpdate(
       { _id: userId },
       { image: image.secure_url },

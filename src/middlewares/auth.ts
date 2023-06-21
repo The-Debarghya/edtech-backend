@@ -19,7 +19,7 @@ type authMiddlewareType = (
 export const auth: authMiddlewareType = async (req, res, next) => {
   try {
     // extract token
-    const { token } =
+    const token =
       req.cookies.token ||
       req.body.token ||
       req.headers["authorization"]?.replace("Bearer ", "");

@@ -20,7 +20,7 @@ export const capturePayment: CapturePaymentFunctionType = async (req, res) => {
     // fetch userId and courseId
     const { course_id } = req.body;
 
-    const userId = req.user.id;
+    const userId = req.user?.id;
 
     // validate
     if (!course_id) {

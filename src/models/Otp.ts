@@ -30,10 +30,7 @@ const otpSchema = new Schema<OtpSchemaType>({
 
 // pre/post hook
 
-type SendVerificationEmailType = (
-  email: string,
-  otp: string
-) => Promise<undefined>;
+type SendVerificationEmailType = (email: string, otp: string) => Promise<void>;
 const sendVerificationEmail: SendVerificationEmailType = async (email, otp) => {
   try {
     const mailResponse: SMTPTransport.SentMessageInfo | undefined =

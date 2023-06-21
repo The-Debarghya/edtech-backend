@@ -2,7 +2,7 @@ import chalk from "chalk";
 import { Profile, ProfileSchemaType } from "../models/Profile.js";
 import { User, UserSchemaType } from "../models/User.js";
 import { Request, Response } from "express";
-import { CustomRequest } from "./Course.js";
+import { CustomRequest } from "../middlewares/auth.js";
 import { FileType, uploadImageToCloudinary } from "../utils/imageUploader.js";
 
 type UpdateProfileFunctionType = (
@@ -16,7 +16,7 @@ export const updateProfile: UpdateProfileFunctionType = async (req, res) => {
     // fetch data
     const { dateOfBirth = "", about = "", contactNumber, gender } = req.body;
 
-    const userId = req.user.id;
+    const userId = req.user?.id;
 
     // validate
     if (!contactNumber || !gender) {
@@ -63,7 +63,7 @@ export const updateProfile: UpdateProfileFunctionType = async (req, res) => {
 export const deleteAccount: UpdateProfileFunctionType = async (req, res) => {
   try {
     // get id
-    const userId = req.user.id;
+    const userId = req.user?.id;
 
     // validate
     const userDetails: UserSchemaType | null = await User.findById(userId);
@@ -106,7 +106,7 @@ export const getAllUserDetails: UpdateProfileFunctionType = async (
 ) => {
   try {
     // fetch data
-    const userId = req.user.id;
+    const userId = req.user?.id;
 
     // validate
     const userDetails: UserSchemaType | null = await User.findById(userId)
@@ -142,7 +142,7 @@ export const updateDisplayPicture: UpdateProfileFunctionType = async (
         message: "File not provided",
       });
     }
-    const userId = req.user.id;
+    const userId = req.user?.id;
     const image = await uploadImageToCloudinary(
       displayPicture,
       process.env.FOLDER_NAME || "rohit",
@@ -177,7 +177,7 @@ export const getEnrolledCourses: UpdateProfileFunctionType = async (
   res
 ) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user?.id;
     const userDetails: UserSchemaType | null = await User.findOne({
       _id: userId,
     })

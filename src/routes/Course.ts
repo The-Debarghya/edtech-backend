@@ -1,7 +1,6 @@
 // Import the modules
 import express, { Router } from "express";
 
-// Import the Controllers
 // Course Controllers Import
 import {
   createCourse,

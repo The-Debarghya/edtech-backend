@@ -6,8 +6,7 @@ import otpGenerator from "otp-generator";
 import { Profile, ProfileSchemaType } from "../models/Profile.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { Query } from "mongoose";
-import { CustomRequest } from "./Course.js";
+import { CustomRequest } from "../middlewares/auth.js";
 import { mailSender } from "../utils/mailSender.js";
 import { passwordUpdateTemplate } from "../mail/templates/passwordUpdateTemplate.js";
 import SMTPTransport from "nodemailer/lib/smtp-transport/index.js";
@@ -282,7 +281,7 @@ type ChangePasswordFunctionType = (
 export const changePassword: ChangePasswordFunctionType = async (req, res) => {
   try {
     // fetch userId
-    const userId = req.user.id;
+    const userId = req.user?.id;
 
     // Get user data from req.user
     const userDetails: UserSchemaType | null = await User.findById(userId);
@@ -321,7 +320,7 @@ export const changePassword: ChangePasswordFunctionType = async (req, res) => {
     const encryptedPassword: string = await bcrypt.hash(newPassword, 10);
     const updatedUserDetails: UserSchemaType | null =
       await User.findByIdAndUpdate(
-        req.user.id,
+        userId,
         { password: encryptedPassword },
         { new: true }
       );

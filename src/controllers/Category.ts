@@ -94,9 +94,12 @@ export const categoryPageDetails = async (req: Request, res: Response) => {
     const selectedCourses = selectedCategory.courses;
 
     // Get courses for other categories
-    const categoriesExceptSelected = await Category.find({
-      _id: { $ne: categoryId },
-    }).populate("courses");
+    const categoriesExceptSelected: CategorySchemaType[] | null =
+      await Category.find({
+        _id: { $ne: categoryId },
+      })
+        .populate("courses")
+        .exec();
     let differentCourses = [];
     for (const category of categoriesExceptSelected) {
       differentCourses.push(...category.courses);
@@ -110,9 +113,13 @@ export const categoryPageDetails = async (req: Request, res: Response) => {
       .slice(0, 10);
 
     res.status(200).json({
-      selectedCourses: selectedCourses,
-      differentCourses: differentCourses,
-      mostSellingCourses: mostSellingCourses,
+      success: true,
+      message: "Selected category courses fetched successfully",
+      data: {
+        selectedCourses: selectedCourses,
+        differentCourses: differentCourses,
+        mostSellingCourses: mostSellingCourses,
+      },
     });
   } catch (error: any) {
     return res.status(500).json({

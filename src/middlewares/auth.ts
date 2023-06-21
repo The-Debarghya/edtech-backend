@@ -6,15 +6,15 @@ import { User } from "../models/User.js";
 import { NextFunction, Request, Response } from "express";
 import chalk from "chalk";
 
-interface CustomRequest extends Request {
-  user: JwtPayload;
+export interface CustomRequest extends Request {
+  user?: JwtPayload;
 }
 
 type authMiddlewareType = (
   req: CustomRequest,
   res: Response,
   next: NextFunction
-) => Promise<Response<any, Record<string, any>> | undefined>;
+) => void;
 // auth
 export const auth: authMiddlewareType = async (req, res, next) => {
   try {
@@ -65,7 +65,7 @@ type IsRoleMiddlewareType = (
 
 export const isStudent: IsRoleMiddlewareType = async (req, res, next) => {
   try {
-    if (req.user.accountType !== "student") {
+    if (req.user?.accountType !== "student") {
       return res.status(401).json({
         success: false,
         message: "This is a protected route for students only",
@@ -84,7 +84,7 @@ export const isStudent: IsRoleMiddlewareType = async (req, res, next) => {
 // isInstructor
 export const isInstructor: IsRoleMiddlewareType = async (req, res, next) => {
   try {
-    if (req.user.accountType !== "instructor") {
+    if (req.user?.accountType !== "instructor") {
       return res.status(401).json({
         success: false,
         message: "This is a protected route for instructors only",
@@ -103,7 +103,7 @@ export const isInstructor: IsRoleMiddlewareType = async (req, res, next) => {
 // isAdmin
 export const isAdmin: IsRoleMiddlewareType = async (req, res, next) => {
   try {
-    if (req.user.accountType !== "admin") {
+    if (req.user?.accountType !== "admin") {
       return res.status(401).json({
         success: false,
         message: "This is a protected route for admin  only",

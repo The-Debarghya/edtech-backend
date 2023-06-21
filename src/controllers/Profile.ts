@@ -3,6 +3,7 @@ import { Profile, ProfileSchemaType } from "../models/Profile.js";
 import { User, UserSchemaType } from "../models/User.js";
 import { Request, Response } from "express";
 import { CustomRequest } from "./Course.js";
+import { FileType, uploadImageToCloudinary } from "../utils/imageUploader.js";
 
 type UpdateProfileFunctionType = (
   req: CustomRequest,
@@ -45,7 +46,7 @@ export const updateProfile: UpdateProfileFunctionType = async (req, res) => {
 
     // return response
     return res.status(200).json({
-      success: false,
+      success: true,
       message: "Update profile successfully",
       profileDetails,
     });
@@ -85,7 +86,7 @@ export const deleteAccount: UpdateProfileFunctionType = async (req, res) => {
 
     // return response
     return res.status(200).json({
-      success: false,
+      success: true,
       message: "Deleted account successfully",
     });
   } catch (err: any) {
@@ -114,9 +115,85 @@ export const getAllUserDetails: UpdateProfileFunctionType = async (
 
     // return response
     return res.status(200).json({
-      success: false,
+      success: true,
       message: "Fetched all users successfully",
       data: userDetails,
+    });
+  } catch (err: any) {
+    console.error(chalk.red.bold(err.message));
+    return res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  }
+};
+
+// updateDisplayPicture
+export const updateDisplayPicture: UpdateProfileFunctionType = async (
+  req,
+  res
+) => {
+  try {
+    const displayPicture: FileType | FileType[] | undefined =
+      req.files?.displayPicture;
+    if (!displayPicture || displayPicture) {
+      return res.status(404).json({
+        success: false,
+        message: "File not provided",
+      });
+    }
+    const userId = req.user.id;
+    const image = await uploadImageToCloudinary(
+      displayPicture,
+      process.env.FOLDER_NAME || "rohit",
+      1000,
+      100
+    );
+    console.log(image);
+    const updatedProfile = await User.findByIdAndUpdate(
+      { _id: userId },
+      { image: image.secure_url },
+      { new: true }
+    );
+
+    // return response
+    return res.status(200).json({
+      success: true,
+      message: `Image Updated successfully`,
+      data: updatedProfile,
+    });
+  } catch (err: any) {
+    console.error(chalk.red.bold(err.message));
+    return res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  }
+};
+
+// getEnrolledCourses
+export const getEnrolledCourses: UpdateProfileFunctionType = async (
+  req,
+  res
+) => {
+  try {
+    const userId = req.user.id;
+    const userDetails: UserSchemaType | null = await User.findOne({
+      _id: userId,
+    })
+      .populate("courses")
+      .exec();
+    if (!userDetails) {
+      return res.status(404).json({
+        success: false,
+        message: `Could not find user with id: ${userDetails}`,
+      });
+    }
+    // return response
+    return res.status(200).json({
+      success: true,
+      message: `Fetched enrolled courses successfully`,
+      data: userDetails.courses,
     });
   } catch (err: any) {
     console.error(chalk.red.bold(err.message));

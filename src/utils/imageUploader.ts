@@ -13,7 +13,7 @@ type CloudinaryUploadFunctionType = (
 export const uploadImageToCloudinary: CloudinaryUploadFunctionType = async (
   file,
   folder,
-  height,
+  height = 100,
   quality = 100
 ) => {
   const options: UploadApiOptions = {

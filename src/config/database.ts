@@ -10,13 +10,12 @@ interface CustomMongooseOptions extends ConnectOptions {
   useUnifiedTopology?: boolean;
 }
 
-const options: CustomMongooseOptions = {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-};
-
 export const dbConnect = async () => {
   try {
+    const options: CustomMongooseOptions = {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    };
     await mongoose.connect(connectionString, options);
     console.log(chalk.yellow("DB Connection Established..."));
   } catch (err) {

@@ -7,10 +7,7 @@ import { Request, Response } from "express";
 import { JwtPayload } from "jsonwebtoken";
 import mongoose from "mongoose";
 import crypto, { Hmac } from "crypto";
-
-export interface CustomRequest extends Request {
-  user: JwtPayload;
-}
+import { CustomRequest } from "../middlewares/auth.js";
 
 type CapturePaymentFunctionType = (
   req: CustomRequest,

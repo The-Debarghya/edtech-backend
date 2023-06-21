@@ -281,8 +281,11 @@ type ChangePasswordFunctionType = (
 // changePassword
 export const changePassword: ChangePasswordFunctionType = async (req, res) => {
   try {
+    // fetch userId
+    const userId = req.user.id;
+
     // Get user data from req.user
-    const userDetails: UserSchemaType | null = await User.findById(req.user.id);
+    const userDetails: UserSchemaType | null = await User.findById(userId);
 
     if (!userDetails) {
       return res

@@ -7,10 +7,7 @@ import { FileType, uploadImageToCloudinary } from "../utils/imageUploader.js";
 import chalk from "chalk";
 import { JwtPayload } from "jsonwebtoken";
 import { UploadApiResponse } from "cloudinary";
-
-export interface CustomRequest extends Request {
-  user: JwtPayload;
-}
+import { CustomRequest } from "../middlewares/auth.js";
 
 type CreateCourseFunctionType = (
   req: CustomRequest,
@@ -55,7 +52,7 @@ export const createCourse: CreateCourseFunctionType = async (req, res) => {
     }
 
     // check for instructor
-    const userId = req.user.id;
+    const userId = req.user?.id;
     const instructorDetails: UserSchemaType | null = await User.findById(
       userId,
       {
@@ -180,6 +177,55 @@ export const showAllCourses: CreateCourseFunctionType = async (req, res) => {
       success: true,
       message: "All Courses data fetched successfully",
       data: allCourses,
+    });
+  } catch (err: any) {
+    console.error(chalk.red.bold(err.message));
+    return res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  }
+};
+
+// getCourseDetails
+export const getCourseDetails: CreateCourseFunctionType = async (req, res) => {
+  try {
+    // fetch data
+    const { courseId } = req.body;
+
+    // populate
+    const courseDetails: CourseSchemaType[] | null = await Course.find({
+      _id: courseId,
+    })
+      .populate({
+        path: "instructor",
+        populate: {
+          path: "additionalDetails",
+        },
+      })
+      .populate("category")
+      .populate("ratingAndReviews")
+      .populate({
+        path: "courseContent",
+        populate: {
+          path: "subSection",
+        },
+      })
+      .exec();
+
+    // validate
+    if (!courseDetails || courseDetails.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: `Could not find course with id: ${courseId}`,
+      });
+    }
+
+    // return response
+    return res.status(200).json({
+      success: true,
+      message: "Course data fetched successfully",
+      data: courseDetails,
     });
   } catch (err: any) {
     console.error(chalk.red.bold(err.message));

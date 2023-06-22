@@ -36,7 +36,7 @@ const sendVerificationEmail: SendVerificationEmailType = async (email, otp) => {
     const mailResponse: SMTPTransport.SentMessageInfo | undefined =
       await mailSender(
         email,
-        "Verification Email from StudyNotion",
+        "Verification Email from Excellence Academia",
         emailVerificationTemplate(otp)
       );
     console.log(chalk.green("Email sent successfully!!!"));

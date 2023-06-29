@@ -9,6 +9,7 @@ import cookieParser from "cookie-parser";
 import { cloudinaryConnect } from "./config/cloudinary.js";
 import fileUpload from "express-fileupload";
 import chalk from "chalk";
+import helmet from "helmet";
 import dotenv from "dotenv";
 
 // environment variables
@@ -16,6 +17,9 @@ dotenv.config();
 
 // app instance
 const app: Express = express();
+
+// Use Helmet!
+app.use(helmet());
 
 // handling json data in requests
 app.use(express.json());

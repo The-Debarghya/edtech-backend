@@ -1,5 +1,4 @@
-version: '3.9'
-
+version: "3.9"
 services:
   app:
     build: .
@@ -9,5 +8,4 @@ services:
       - 4000
     env_file:
       - .env
-      
-    
+    image: edtech-backend:latest

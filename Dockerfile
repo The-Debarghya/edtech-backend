@@ -15,7 +15,7 @@ COPY . .
 RUN npm run build
 
 # -- dependancy stager
-FROM node:lts-bookworm-slim AS deps
+FROM node:lts-bullseye-slim AS deps
 
 WORKDIR /deps
 

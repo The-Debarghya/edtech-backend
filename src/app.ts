@@ -31,7 +31,13 @@ app.use(cookieParser());
 // cors
 app.use(
   cors({
-    origin: "https://excellence-academia.vercel.app",
+    origin: [
+      "https://excellence-academia-git-main-looneyd-rohit.vercel.app/",
+      "https://excellence-academia-2q0ukte5r-looneyd-rohit.vercel.app/",
+      "http://excellence-academia.vercel.app/",
+      "http://localhost:3000",
+      "http://127.0.0.1:3000",
+    ],
     credentials: true,
   })
 );

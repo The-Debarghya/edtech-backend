@@ -2,6 +2,7 @@ import express, { Express } from "express";
 import cors from "cors";
 import courseRouter from "./routes/Course.js";
 import paymentsRouter from "./routes/Payments.js";
+import contactUsRouter from "./routes/Contact.js";
 import profileRouter from "./routes/Profile.js";
 import userRouter from "./routes/User.js";
 import { dbConnect } from "./config/database.js";
@@ -30,7 +31,7 @@ app.use(cookieParser());
 // cors
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: "http://localhost:3000",
     credentials: true,
   })
 );
@@ -56,6 +57,7 @@ app.use("/api/v1/auth", userRouter);
 app.use("/api/v1/profile", profileRouter);
 app.use("/api/v1/course", courseRouter);
 app.use("/api/v1/payment", paymentsRouter);
+app.use("/api/v1/reach", contactUsRouter);
 
 // default route
 app.all("*", (req, res) => {

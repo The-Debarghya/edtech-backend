@@ -14,7 +14,14 @@ type UpdateProfileFunctionType = (
 export const updateProfile: UpdateProfileFunctionType = async (req, res) => {
   try {
     // fetch data
-    const { dateOfBirth = "", about = "", contactNumber, gender } = req.body;
+    const {
+      firstName,
+      lastName,
+      dateOfBirth = "",
+      about = "",
+      contactNumber,
+      gender,
+    } = req.body;
 
     const userId = req.user?.id;
 
@@ -28,6 +35,17 @@ export const updateProfile: UpdateProfileFunctionType = async (req, res) => {
 
     // find profile
     const userDetails = await User.findById(userId);
+
+    if (!userDetails) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    if (firstName) userDetails.firstName = firstName;
+    if (lastName) userDetails.lastName = lastName;
+    await userDetails.save();
 
     const profileId = userDetails?.additionalDetails;
 
@@ -44,9 +62,14 @@ export const updateProfile: UpdateProfileFunctionType = async (req, res) => {
     // save profile
     await profileDetails.save();
 
+    const updatedUserDetails = await User.findById(userId)
+      .populate("additionalDetails")
+      .exec();
+
     // return response
     return res.status(200).json({
       success: true,
+      updatedUserDetails,
       message: "Update profile successfully",
       profileDetails,
     });
@@ -190,6 +213,7 @@ export const getEnrolledCourses: UpdateProfileFunctionType = async (
     })
       .populate("courses")
       .exec();
+    console.log(userDetails);
     if (!userDetails) {
       return res.status(404).json({
         success: false,

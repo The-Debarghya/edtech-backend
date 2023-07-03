@@ -164,7 +164,7 @@ export const signUp: SignUpFunctionType = async (
 
     // save to db
     let approved: any = "";
-    approved === "Instructor" ? (approved = false) : (approved = true);
+    approved === "instructor" ? (approved = false) : (approved = true);
 
     const profileDetails = await Profile.create({
       gender: null,
@@ -257,7 +257,7 @@ export const login: LoginFunctionType = async (req, res) => {
       return res.cookie("token", token, options).status(200).json({
         success: true,
         token,
-        data: checkUserPresent,
+        user: checkUserPresent,
         message: "Logged in successfully",
       });
     }

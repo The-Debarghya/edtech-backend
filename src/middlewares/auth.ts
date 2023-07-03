@@ -23,6 +23,7 @@ export const auth: authMiddlewareType = async (req, res, next) => {
       req.cookies.token ||
       req.body.token ||
       req.headers["authorization"]?.replace("Bearer ", "");
+    console.log(req.headers.authorization);
 
     // token missing
     if (!token) {

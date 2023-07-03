@@ -59,7 +59,7 @@ const userSchema = new Schema<UserSchemaType>(
     courses: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Courses",
+        ref: "Course",
       },
     ],
     image: {

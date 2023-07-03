@@ -20,7 +20,16 @@ dotenv.config();
 const app: Express = express();
 
 // Use Helmet!
-app.use(helmet());
+// app.use(
+//   helmet.contentSecurityPolicy({
+//     directives: {
+//       // Specify the CSP directives here
+//       // ...
+//       // Add the necessary directive to allow the image URL
+//       "img-src": ["'self'", "res.cloudinary.com", "data:"],
+//     },
+//   })
+// );
 
 // handling json data in requests
 app.use(express.json());
@@ -60,6 +69,9 @@ dbConnect();
 
 // connect to cloudinary
 cloudinaryConnect();
+
+// serving as static files (get rid of cors)
+// app.use(express.static("frontend/build"));
 
 // routes
 app.use("/api/v1/auth", userRouter);

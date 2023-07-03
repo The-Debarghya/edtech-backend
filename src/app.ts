@@ -47,6 +47,8 @@ app.use(
       "https://excellence-academia-git-main-looneyd-rohit.vercel.app",
       "https://excellence-academia-2q0ukte5r-looneyd-rohit.vercel.app",
       "http://excellence-academia.vercel.app",
+      "https://edtech-backend-dev.onrender.com/",
+      "https://edtech-backend-dev.onrender.com",
       "http://localhost:3000",
       "http://127.0.0.1:3000",
     ],

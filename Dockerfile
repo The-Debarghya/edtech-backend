@@ -44,6 +44,6 @@ COPY --from=deps /deps/node_modules ./node_modules
 RUN mkdir dist
 COPY --from=builder /source/dist ./dist
 
-EXPOSE 80
+EXPOSE 4000
 
 CMD [ "npm", "start" ]

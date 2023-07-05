@@ -11,15 +11,27 @@ import { cloudinaryConnect } from "./config/cloudinary.js";
 import fileUpload from "express-fileupload";
 import chalk from "chalk";
 import helmet from "helmet";
+import logger from "morgan";
 import dotenv from "dotenv";
 import path, { dirname } from "path";
 import { fileURLToPath } from "url";
+import credentials from "./middlewares/credentials.js";
+import corsOptions from "./config/corsOptions.js";
 
 // environment variables
 dotenv.config();
 
 // app instance
 const app: Express = express();
+
+// middleware to prevent browser caching always
+app.use((req, res, next) => {
+  res.set("Cache-Control", "no-store");
+  next();
+});
+
+// middleware for logging purposes
+app.use(logger("tiny"));
 
 // Use Helmet!
 app.use(
@@ -33,31 +45,20 @@ app.use(
   })
 );
 
+// middleware for Access Control Allow Origin, to be called before cors
+app.use(credentials);
+
+// cors (not required if serving statically)
+app.use(cors(corsOptions));
+
 // handling json data in requests
 app.use(express.json());
 
+// middleware to handle incoming url encoded form data
+app.use(express.urlencoded({ extended: false }));
+
 // cookie parser
 app.use(cookieParser());
-
-// cors (not required if serving statically)
-app.use(cors());
-// app.use(
-//   cors({
-//     origin: [
-//       "https://excellence-academia-git-main-looneyd-rohit.vercel.app/",
-//       "https://excellence-academia-2q0ukte5r-looneyd-rohit.vercel.app/",
-//       "http://excellence-academia.vercel.app/",
-//       "https://excellence-academia-git-main-looneyd-rohit.vercel.app",
-//       "https://excellence-academia-2q0ukte5r-looneyd-rohit.vercel.app",
-//       "http://excellence-academia.vercel.app",
-//       "https://edtech-backend-dev.onrender.com/",
-//       "https://edtech-backend-dev.onrender.com",
-//       "http://localhost:3000",
-//       "http://127.0.0.1:3000",
-//     ],
-//     credentials: true,
-//   })
-// );
 
 // express file upload
 app.use(

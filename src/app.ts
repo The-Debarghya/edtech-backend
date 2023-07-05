@@ -49,7 +49,7 @@ app.use(
 app.use(credentials);
 
 // cors (not required if serving statically)
-app.use(cors(corsOptions));
+app.use(cors());
 
 // handling json data in requests
 app.use(express.json());

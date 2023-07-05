@@ -12,6 +12,8 @@ import fileUpload from "express-fileupload";
 import chalk from "chalk";
 import helmet from "helmet";
 import dotenv from "dotenv";
+import path, { dirname } from "path";
+import { fileURLToPath } from "url";
 
 // environment variables
 dotenv.config();
@@ -20,16 +22,16 @@ dotenv.config();
 const app: Express = express();
 
 // Use Helmet!
-// app.use(
-//   helmet.contentSecurityPolicy({
-//     directives: {
-//       // Specify the CSP directives here
-//       // ...
-//       // Add the necessary directive to allow the image URL
-//       "img-src": ["'self'", "res.cloudinary.com", "data:"],
-//     },
-//   })
-// );
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      // Specify the CSP directives here
+      // ...
+      // Add the necessary directive to allow the image URL
+      "img-src": ["'self'", "res.cloudinary.com", "data:"],
+    },
+  })
+);
 
 // handling json data in requests
 app.use(express.json());
@@ -37,24 +39,25 @@ app.use(express.json());
 // cookie parser
 app.use(cookieParser());
 
-// cors
-app.use(
-  cors({
-    origin: [
-      "https://excellence-academia-git-main-looneyd-rohit.vercel.app/",
-      "https://excellence-academia-2q0ukte5r-looneyd-rohit.vercel.app/",
-      "http://excellence-academia.vercel.app/",
-      "https://excellence-academia-git-main-looneyd-rohit.vercel.app",
-      "https://excellence-academia-2q0ukte5r-looneyd-rohit.vercel.app",
-      "http://excellence-academia.vercel.app",
-      "https://edtech-backend-dev.onrender.com/",
-      "https://edtech-backend-dev.onrender.com",
-      "http://localhost:3000",
-      "http://127.0.0.1:3000",
-    ],
-    credentials: true,
-  })
-);
+// cors (not required if serving statically)
+app.use(cors());
+// app.use(
+//   cors({
+//     origin: [
+//       "https://excellence-academia-git-main-looneyd-rohit.vercel.app/",
+//       "https://excellence-academia-2q0ukte5r-looneyd-rohit.vercel.app/",
+//       "http://excellence-academia.vercel.app/",
+//       "https://excellence-academia-git-main-looneyd-rohit.vercel.app",
+//       "https://excellence-academia-2q0ukte5r-looneyd-rohit.vercel.app",
+//       "http://excellence-academia.vercel.app",
+//       "https://edtech-backend-dev.onrender.com/",
+//       "https://edtech-backend-dev.onrender.com",
+//       "http://localhost:3000",
+//       "http://127.0.0.1:3000",
+//     ],
+//     credentials: true,
+//   })
+// );
 
 // express file upload
 app.use(
@@ -72,9 +75,6 @@ dbConnect();
 // connect to cloudinary
 cloudinaryConnect();
 
-// serving as static files (get rid of cors)
-// app.use(express.static("frontend/build"));
-
 // routes
 app.use("/api/v1/auth", userRouter);
 app.use("/api/v1/profile", profileRouter);
@@ -82,8 +82,21 @@ app.use("/api/v1/course", courseRouter);
 app.use("/api/v1/payment", paymentsRouter);
 app.use("/api/v1/reach", contactUsRouter);
 
-// default route
+// serving as static files (get rid of cors)
+// const filePath = fileURLToPath(import.meta.url);
+// const directoryPath = dirname(filePath);
+// console.log(path.resolve(directoryPath, "frontend", "build"));
+// app.use(express.static(path.join(directoryPath, "frontend", "build")));
+
+// app.get("*", (req, res) => {
+//   res.sendFile(path.resolve(directoryPath, "frontend", "build", "index.html"));
+// });
+
+// default route (use only in development)
 app.all("*", (req, res) => {
+  // return res
+  //   .status(200)
+  //   .sendFile(path.resolve(directoryPath, "frontend", "build", "index.html"));
   return res.status(200).json({
     success: true,
     message: "Server is up and running...",

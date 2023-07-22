@@ -52,7 +52,7 @@ export const showAllCategories: CreateCategoryFunctionType = async (
     return res.status(200).json({
       success: true,
       message: "All categories returned successfully ",
-      allCategorys,
+      data: allCategorys,
     });
   } catch (err: any) {
     console.error(chalk.red.bold(err.message));
